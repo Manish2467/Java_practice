@@ -1,16 +1,15 @@
-import java.util.ArrayList;
 
 public class access_modifier {
 
-    private ArrayList<String> names = new ArrayList<>();
+    private String names;
     public String age;
     protected String gender;
 
     void SetName(String name){
-        names.add(name);
+        this.names = name;
     }
 
-    ArrayList<String> GetName(){
+    String GetName(){
         return names;
     }
 
@@ -20,9 +19,7 @@ public class access_modifier {
         a.SetName("Manish");            // private access modifier
         a.SetName("Nikesh");
         
-        for(String n : a.GetName()){
-            System.out.println(n);
-        }
+        System.out.println(a.GetName());
 
         a.age = "12";               //public access modifier
         System.out.println(a.age);
