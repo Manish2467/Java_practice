@@ -18,6 +18,8 @@ public class StaticKeyword {
     }
     public static void main(String[] args) {
         
+        //StaticKeyword sk = new StaticKeyword();
+
         StaticKeyword sk = new StaticKeyword();
         sk.SetName("manish timsina"); 
         StaticKeyword.age = 12; 
@@ -26,7 +28,7 @@ public class StaticKeyword {
 
         StaticKeyword sk1 = new StaticKeyword();
         sk1.SetName("nikesh");
-        //StaticKeyword.age = 13;
+        StaticKeyword.age = 13;
         sk1.GetName();
         System.out.println(StaticKeyword.age);
 
@@ -34,6 +36,8 @@ public class StaticKeyword {
 }
 
 
+
+//
 
 /*
  * 

@@ -8,7 +8,7 @@
             }
 
             boolean isprime = true;
-            for(int i =2;i<=Math.sqrt(num);i++) {
+            for(int i =2;i<=num/2;i++) {
                 if (num % i == 0) {
                     //System.out.println(num +" is not a prime number");
                     isprime = false;

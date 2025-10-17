@@ -9,12 +9,17 @@ public class Constructor {
        name = "manish";
     }
 
+    public Constructor(String nam){
+        this.name = nam;
+        this.age = 12;
+    }
+
     public void display(){
         System.out.println(age + name);
     }
 
     public static void main(String[] args) {
-        Constructor obj1 = new Constructor();
+        Constructor obj1 = new Constructor("hari");
         obj1.display();
 
         Constructor obj2 = new Constructor();

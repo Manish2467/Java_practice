@@ -1,4 +1,5 @@
 abstract class Car{
+    int num = 10;
     public abstract void drive();
     public abstract void fly();
 
@@ -15,15 +16,20 @@ class Toyota extends Car{
     public void fly(){
         System.out.println("the car is flying..");
     }
+    
+    public void printNUm(){
+        System.out.println(num);
+    }
 }
 
 
 
-public class AbstractClass  {
+public class  AbstractClass  {
     public static void main(String[] args) {
-        Car car = new Toyota();
+        Toyota car = new Toyota();    //toyota ra car ko difference
         car.drive();
         car.playMusic();
+        car.printNUm();
     }
 }
 

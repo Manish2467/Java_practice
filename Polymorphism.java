@@ -17,3 +17,8 @@ public class Polymorphism {
         System.out.println(poly.add(1,2,3));
     }
 }
+
+
+// same class ma overriding mildaina
+
+// overriding herne
