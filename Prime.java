@@ -41,3 +41,6 @@
             }while(choice.equalsIgnoreCase("Y"));
         }
     }
+
+
+    // stream , for each loop, lambda expression -> predicate , supplier, consumer,
