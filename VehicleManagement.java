@@ -37,7 +37,7 @@ class Cars extends Vehicles implements Serviceable{
         number = sc.nextInt();
         System.out.println("enter year :");
         year = sc.nextInt();
-        System.out.println("the car brand is : "+brand+" the numer is : "+number+" the year is : "+year);
+        System.out.println("the car brand is : "+brand+" the number is : "+number+" the year is : "+year);
 
     }
     public void start(){
