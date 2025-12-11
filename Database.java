@@ -1,8 +1,10 @@
-import java.lang.Exception;
-import java.net.ConnectException;
+import java.io.*;
 import java.sql.*   ;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+
+// **docker desktop halera check garne
 
 public class Database {
 
@@ -21,19 +23,23 @@ public class Database {
     }
 
     public static void fetch(Connection con) throws SQLException{
-        String sql = "select * from user order by id desc";
+        String sql = "select * from student order by id desc";
         try( Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql);) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int age = rs.getInt("age");  //database ko column ko name same hunu parxa
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");  //database ko column ko name same hunu parxa
 
-                System.out.println("ID: "+id+" Name: " + name + " Age: " + age);
+                System.out.println("ID: "+id+" Name: " + first_name + " last name: " + last_name);
             }
 
         }
     }
+
+
+    // aggregate functions, get user details by id , ternary operator
+
 
     public static void add(Connection con) throws SQLException{
         Scanner sc = new Scanner(System.in);
@@ -41,15 +47,18 @@ public class Database {
         //int id = sc.nextInt();
         //sc.nextLine();
         System.out.println("enter the name:");
-        String name = sc.nextLine();
-        System.out.println("Enter age ");
-        int age = sc.nextInt();
+        String first_name = sc.nextLine();
+        System.out.println("Enter last name: ");
+        String last_name = sc.nextLine();
+        System.out.println("enter the id:");
+        int id = sc.nextInt();
 
-        String insert = "insert into user (name,age) values (?,?)";
+        String insert = "insert into student (first_name,last_name,id) values (?,?,?)";
         try(PreparedStatement pstm = con.prepareStatement(insert)){
             //pstm.setInt(1,id);
-            pstm.setString(1,name);
-            pstm.setInt(2,age);
+            pstm.setString(1,first_name);
+            pstm.setString(2,last_name);
+            pstm.setInt(3,id);
                                                                     //sql injection statement ma herne
                                                                 // delete thapnu paro, update
              pstm.executeUpdate();
@@ -62,13 +71,13 @@ public class Database {
         int id = sc.nextInt();
         sc.nextLine();
         System.out.println("enter user name");
-        String name = sc.nextLine();
-        System.out.println("enter user age");
-        int age = sc.nextInt();
-        String prompt = "update user set name = ?,age = ? where id = ?";
+        String first_name = sc.nextLine();
+        System.out.println("enter user last_name");
+        String last_name = sc.nextLine();
+        String prompt = "update student set first_name = ?,last_name = ? where id = ?";
         try(PreparedStatement pstm = con.prepareStatement(prompt)){
-            pstm.setString(1,name);
-            pstm.setInt(2,age);
+            pstm.setString(1,first_name);
+            pstm.setString(2,last_name);
             pstm.setInt(3,id);
             pstm.executeUpdate();
             System.out.println("value updated successfully");
@@ -79,13 +88,59 @@ public class Database {
     public static void delete(Connection con, Scanner sc) throws  SQLException{
         System.out.println("enter the id of the user you want to delete: ");
         int id = sc.nextInt();
-        String prompt = "delete from user where id = ?";
+        String prompt = "delete from student where id = ?";
         try(PreparedStatement pstm = con.prepareStatement(prompt)){
             pstm.setInt(1,id);
             pstm.executeUpdate();
         }
         System.out.println("user deleted successfully");
         sc.nextLine();
+    }
+
+    public static void Csvwriter(Connection con, Scanner sc) throws SQLException, IOException {
+        String file = "data.csv";
+        String query = "insert into student (first_name,last_name,id) values (?,?,?)";
+        String line;
+
+        try(BufferedReader br = new BufferedReader(new FileReader(file)); PreparedStatement ps = con.prepareStatement(query)){
+            //line = br.readLine();
+            while((line = br.readLine())!=null){
+                String[] values = line.split(",");
+                ps.setString(1,values[0]);
+                ps.setString(2,values[1]);
+                ps.setInt(3,Integer.parseInt(values[2]));
+
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            System.out.println("CSV data successfully inserted into database.");
+        }
+
+
+
+    }
+
+    public static void Csvinsert(Connection con, Scanner sc) throws SQLException, IOException {
+        String file = "data.csv";
+
+
+        try(FileWriter fw = new FileWriter(file,true)){
+            System.out.println("enter the number of student you want to insert: ");
+            int no = sc.nextInt();
+            sc.nextLine();
+            for(int i=0;i<no;i++){
+                System.out.println("enter student first name: ");
+                String fname = sc.nextLine();
+                System.out.println("enter student last name: ");
+                String lname = sc.nextLine();
+                System.out.println("enter student id: ");
+                int iid = sc.nextInt();
+                sc.nextLine();
+
+                fw.append(fname).append(",").append(lname).append(",").append(Integer.toString(iid)).append("\n");
+            }
+            System.out.println("csv updated successfully");
+        }
     }
 
 
@@ -115,9 +170,9 @@ public class Database {
         Scanner sc = new Scanner(System.in);
 
 
-        String url = "jdbc:mysql://localhost:3306/java_practice";
+        String url = "jdbc:mysql://localhost:3306/myDB";
         String username = "root";
-        String password = "Manish@12";
+        String password = "password";
         String choose;
 
 
@@ -126,7 +181,7 @@ public class Database {
 
             do {
 
-                int num = choice(sc, "enter 1 for adding ,2 for displaying, 3 for update and 4 for delete");
+                int num = choice(sc, "enter 1 for adding ,2 for displaying, 3 for update ,4 for delete , 5 for csv import and 6 for csv entry");
 
 
                 switch (num) {
@@ -141,7 +196,13 @@ public class Database {
                         break;
                     case 4:
                         delete(con,sc);
-                        break;                          // user ko name number halda ni teslai string samjinxa,,  do you want to continue ma validation
+                        break;// user ko name number halda ni teslai string samjinxa,,  do you want to continue ma validation
+                    case 5:
+                        Csvwriter(con,sc);
+                        break;
+                    case 6:
+                        Csvinsert(con,sc);
+                        break;
                     default:
                         System.out.println("you have entered wrong choice");
                         break;
@@ -163,6 +224,9 @@ public class Database {
         catch (InputMismatchException e){
             System.out.println("please provide valid details ");
         }
+        catch(IOException e){
+            System.out.println("IO error occured");
+        }
 
     }
 }
@@ -174,7 +238,7 @@ public class Database {
 
 // excel bata read garera database ma halnu paro (name,rollno , email, password, class, school name) excel ma hunxa
 // user table ra students details table login (email bata password handa ** aunu paro)
-
+//database ko data export to excel
 
 //lambda expression
 // java stream
