@@ -1,4 +1,4 @@
-public class Exception {
+public class Exception extends Throwable {
     public static void main(String[] args) {
         try{
             int num = Integer.parseInt("manish");
