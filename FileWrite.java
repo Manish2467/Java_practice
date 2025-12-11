@@ -15,3 +15,9 @@ public class FileWrite {
         }
     }
 }
+
+
+// file close garne herne
+
+// **finally ra try with resource herne
+// csv read garne
